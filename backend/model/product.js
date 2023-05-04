@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema({
   },
   originalPrice: {
     type: Number,
+    required: [false, "Please enter your product price!"],
   },
   discountPrice: {
     type: Number,
