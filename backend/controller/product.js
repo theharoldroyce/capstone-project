@@ -168,6 +168,48 @@ router.put(
   })
 );
 
+// edit product
+router.put(
+  "/edit-product/:id",
+  isSeller,
+  upload.array("images"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const productId = req.params.id;
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return next(new ErrorHandler("Product not found with this id!", 404));
+      }
+
+      const files = req.files;
+      const imageUrls = files.map((file) => `${file.filename}`);
+
+      const productData = req.body;
+      productData.images = imageUrls;
+      productData.shop = product.shop;
+      productData.updatedAt = Date.now();
+
+      const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        productData,
+        {
+          new: true,
+          runValidators: true,
+          useFindAndModify: false,
+        }
+      );
+
+      res.status(200).json({
+        success: true,
+        product: updatedProduct,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  })
+);
+
 // all products --- for admin
 router.get(
   "/admin-all-products",

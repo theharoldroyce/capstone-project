@@ -94,3 +94,31 @@ export const getAllProducts = () => async (dispatch) => {
     });
   }
 };
+
+
+//edit product
+export const editProduct = (id, updatedForm) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "editProductRequest",
+    });
+
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+
+    const { data } = await axios.put(
+      `${server}/product/edit-product/${id}`,
+      updatedForm,
+      config
+    );
+
+    dispatch({
+      type: "editProductSuccess",
+      payload: data.product,
+    });
+  } catch (error) {
+    dispatch({
+      type: "editProductFail",
+      payload: error.response.data.message,
+    });
+  }
+};
