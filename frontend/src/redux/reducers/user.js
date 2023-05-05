@@ -78,4 +78,23 @@ export const userReducer = createReducer(initialState, {
   clearMessages: (state) => {
     state.successMessage = null;
   },
+
+    // get all users --- seller
+    getSellerAllUsersRequest: (state) => {
+      state.usersLoading = true;
+    },
+    getSellerAllUsersSuccess: (state,action) => {
+      state.usersLoading = false;
+      state.users = action.payload;
+    },
+    getSellerAllUsersFailed: (state,action) => {
+      state.usersLoading = false;
+      state.error = action.payload;
+    },
+    clearErrors: (state) => {
+      state.error = null;
+    },
+    clearMessages: (state) => {
+      state.successMessage = null;
+    },
 });

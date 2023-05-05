@@ -102,9 +102,9 @@ const AllEvents = () => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
-        Stock: item.stock,
-        sold: item.sold_out,
+        price: "₱ " + item.discountPrice + ".00",
+        Stock: item.stock + " pcs",
+        sold: item.sold_out + " pcs",
       });
     });
 

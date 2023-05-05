@@ -100,7 +100,7 @@ const AllWithdraw = () => {
         id: item._id,
         shopId: item.seller._id,
         name: item.seller.name,
-        amount: "US$ " + item.amount,
+        amount: "₱ " + item.amount + ".00",
         status: item.status,
         createdAt: item.createdAt.slice(0, 10),
       });

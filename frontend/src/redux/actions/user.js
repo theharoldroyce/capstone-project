@@ -165,3 +165,28 @@ export const getAllUsers = () => async (dispatch) => {
     });
   }
 };
+
+// get all users --- seller
+export const getSellerAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllUsersRequest",
+    });
+
+    const { data } = await axios.get(`${server}/user/all-users`, {
+      withCredentials: true,
+    });
+
+    dispatch({
+      type: "getAllUsersSuccess",
+      payload: data.users,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllUsersFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+

@@ -600,44 +600,31 @@ export const footerProductLinks = [
     link: "/about"
   },
   {
-    name: "Careers",
-    link: "/carrers"
-  },
-  {
     name: "Store Locations",
-  },
-  {
-    name: "Our Blog",
-  },
-  {
-    name: "Reviews",
   },
 ];
 
 export const footercompanyLinks = [
   {
-    name: "Game & Video",
+    name: "Building Supplies",
   },
   {
-    name: "Phone &Tablets",
+    name: "Electrical Supplies",
   },
   {
-    name: "Computers & Laptop",
+    name: "Hardware Supplies",
   },
   {
-    name: "Sport Watches",
+    name: "Paints & Sundries",
   },
   {
-    name: "Events",
+    name: "Plumbing",
   },
 ];
 
 export const footerSupportLinks = [
   {
     name: "FAQ",
-  },
-  {
-    name: "Reviews",
   },
   {
     name: "Contact Us",

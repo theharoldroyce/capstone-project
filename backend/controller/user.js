@@ -9,7 +9,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
-const { isAuthenticated, isAdmin,isSeller } = require("../middleware/auth");
+const { isAuthenticated, isAdmin, isSeller } = require("../middleware/auth");
 const user = require("../model/user");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
@@ -41,7 +41,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
     const activationUrl = `http://localhost:3000/activation/${activationToken}`;
-    // const activationUrl = `https://eshop-tutorial-cefl.vercel.app/activation/${activationToken}`;
+
 
     try {
       await sendMail({
@@ -382,6 +382,25 @@ router.get(
     }
   })
 );
+
+// all users --- for seller
+router.get(
+  "/all-users",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const users = await User.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 
 // delete users --- admin
 router.delete(
