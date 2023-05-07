@@ -230,4 +230,249 @@ router.get(
   })
 );
 
+// get total sales for the current day with status "Delivered"
+router.get(
+  "/total-sales-today",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+      const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfDay, $lt: endOfDay },
+      });
+
+      let totalSales = 0;
+      for (const order of orders) {
+        totalSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+// get the week total sales with status "Delivered"
+router.get(
+  "/total-sales-week",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay());
+      const endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfWeek, $lt: endOfWeek },
+      });
+
+      let totalwSales = 0;
+      for (const order of orders) {
+        totalwSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalwSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+// get total sales for the current month with status "Delivered"
+router.get(
+  "/total-sales-month",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfMonth, $lte: endOfMonth },
+      });
+
+      let totalMonthSales = 0;
+      for (const order of orders) {
+        totalMonthSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalMonthSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get total sales for the current year with status "Delivered"
+router.get(
+  "/total-sales-year",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentYear = new Date().getFullYear();
+      const startOfYear = new Date(currentYear, 0, 1);
+      const endOfYear = new Date(currentYear + 1, 0, 1);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfYear, $lt: endOfYear },
+      });
+
+      let totalYearSales = 0;
+      for (const order of orders) {
+        totalYearSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalYearSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get the yesterday total sales with status "Delivered"
+router.get(
+  "/total-sales-yesterday",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const yesterday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+      const startOfDay = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
+      const endOfDay = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate() + 1);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfDay, $lt: endOfDay },
+      });
+
+      let totalySales = 0;
+      for (const order of orders) {
+        totalySales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalySales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get the last week total sales with status "Delivered"
+router.get(
+  "/total-sales-last-week",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfWeek = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() - currentDate.getDay() - 6
+      );
+      const endOfWeek = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() - currentDate.getDay() + 1
+      );
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfWeek, $lt: endOfWeek },
+      });
+
+      let totalLastSales = 0;
+      for (const order of orders) {
+        totalLastSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalLastSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+// get the total last month sales with status "Delivered"
+router.get(
+  "/total-sales-last-month",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+      const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0, 23, 59, 59);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfMonth, $lte: endOfMonth },
+      });
+
+      let totalLastMonthSales = 0;
+      for (const order of orders) {
+        totalLastMonthSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalLastMonthSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get total sales for the last year with status "Delivered"
+router.get(
+  "/total-sales-last-year",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfYear = new Date(currentDate.getFullYear() - 1, 0, 1);
+      const endOfYear = new Date(currentDate.getFullYear(), 0, 1);
+
+      const orders = await Order.find({
+        status: "Delivered",
+        deliveredAt: { $gte: startOfYear, $lt: endOfYear },
+      });
+
+      let totalLYearSales = 0;
+      for (const order of orders) {
+        totalLYearSales += order.totalPrice;
+      }
+
+      res.status(200).json({
+        success: true,
+        totalLYearSales,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
 module.exports = router;
