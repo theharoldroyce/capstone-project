@@ -10,6 +10,7 @@ const initialState = {
   totalMonthSales: 0, // Initial state of total current month sales
   totalLastMonthSales: 0, // Initial state of total last month sales
   totalYearSales: 0, // Initial state of total year sales
+  totalLYearSales: 0, // Initial state of total last year sales
 
 };
 
@@ -143,9 +144,20 @@ export const orderReducer = createReducer(initialState, {
     state.isLoading = false;
     state.error = action.payload;
   },
+ 
 
   // get total sales for the last year with status "Delivered"
-
+  getLastYearSaleRequest: (state) => {
+    state.isLoading = true;
+  },
+  getLastYearSaleSuccess: (state, action) => {
+    state.isLoading = false;
+    state.totalLYearSales = action.payload;
+  },
+  getLastYearSaleFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
 
 
 

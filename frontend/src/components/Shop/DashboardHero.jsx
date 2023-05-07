@@ -16,6 +16,7 @@ import {
   getMonthSale,
   getLastMonthSale,
   getYearSale,
+  getLastYearSale
 } from "../../redux/actions/order";
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
@@ -36,6 +37,7 @@ const DashboardHero = () => {
     totalMonthSales,
     totalLastMonthSales,
     totalYearSales,
+    totalLYearSales
   } = useSelector((state) => state.order);
 
  
@@ -46,6 +48,7 @@ const DashboardHero = () => {
   const [monthSales, setMonthSales] = useState(0);
   const [lMonthSales, setLMonthSales] = useState(0);
   const [yearSales, setYearSales] = useState(0);
+  const [lastYearSales, setLastYearSales] = useState(0);
 
 
 
@@ -60,6 +63,7 @@ const DashboardHero = () => {
     dispatch(getMonthSale());
     dispatch(getLastMonthSale());
     dispatch(getYearSale());
+    dispatch(getLastYearSale());
   }, [dispatch]);
 
   useEffect(() => {
@@ -70,7 +74,8 @@ const DashboardHero = () => {
     setMonthSales(totalMonthSales);
     setLMonthSales(totalLastMonthSales);
     setYearSales(totalYearSales);
-  }, [totalSales, totalySales, totalwSales, totalLastSales, totalMonthSales,totalLastMonthSales,totalYearSales]);
+    setLastYearSales(totalLYearSales);
+  }, [totalSales, totalySales, totalwSales, totalLastSales, totalMonthSales,totalLastMonthSales,totalYearSales,totalLYearSales]);
 
   console.log(yearSales)
   
@@ -223,7 +228,7 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Yesterday's Earning{" "}
+              Previous Day Earning{" "}
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {yesterdaySales}.00</h5>
@@ -252,7 +257,7 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Last Week Earning{" "}
+              Previous Week Earning{" "}
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lastWeektSales}.00</h5>
@@ -282,7 +287,7 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Last Month Earning{" "}
+              Previous Month Earning{" "}
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lMonthSales}.00</h5>
@@ -318,10 +323,10 @@ const DashboardHero = () => {
               <h3
                 className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
               >
-                Total Last Year Earning{" "}
+                Total Previous Year Earning{" "}
               </h3>
             </div>
-            {/* <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {totalsale}.00</h5> */}
+            <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lastYearSales}.00</h5>
           </div>
         </div>
       </div>
