@@ -168,47 +168,6 @@ router.put(
   })
 );
 
-// edit product
-router.put(
-  "/edit-product/:id",
-  isSeller,
-  upload.array("images"),
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const productId = req.params.id;
-      const product = await Product.findById(productId);
-
-      if (!product) {
-        return next(new ErrorHandler("Product not found with this id!", 404));
-      }
-
-      const files = req.files;
-      const imageUrls = files.map((file) => `${file.filename}`);
-
-      const productData = req.body;
-      productData.images = imageUrls;
-      productData.shop = product.shop;
-      productData.updatedAt = Date.now();
-
-      const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        productData,
-        {
-          new: true,
-          runValidators: true,
-          useFindAndModify: false,
-        }
-      );
-
-      res.status(200).json({
-        success: true,
-        product: updatedProduct,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 400));
-    }
-  })
-);
 
 // all products --- for admin
 router.get(
@@ -229,4 +188,58 @@ router.get(
     }
   })
 );
+
+
+// update product
+router.put(
+  "/update-product/:id",
+  upload.array("images"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const productId = req.params.id;
+      const { name, discountPrice, stock } = req.body;
+
+      let product = await Product.findById(productId);
+
+      if (!product) {
+        return next(new ErrorHandler("Product not found with this id!", 404));
+      }
+
+      if (req.files) {
+        // If new images are uploaded, update the image URLs
+        const files = req.files;
+        const imageUrls = files.map((file) => `${file.filename}`);
+
+        // Delete old images from server
+        product.images.forEach((imageUrl) => {
+          const filename = imageUrl;
+          const filePath = `uploads/${filename}`;
+
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        });
+
+        product.images = imageUrls;
+      }
+
+      product.name = name;
+      product.discountPrice = discountPrice;
+      product.stock = stock;
+
+      product = await product.save({ validateBeforeSave: false });
+
+      res.status(200).json({
+        success: true,
+        product,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+
 module.exports = router;

@@ -95,20 +95,14 @@ export const getAllProducts = () => async (dispatch) => {
   }
 };
 
-
-//edit product
-export const editProduct = (id, updatedForm) => async (dispatch) => {
+// edit product
+export const editProduct = (id, updatedData) => async (dispatch) => {
   try {
-    dispatch({
-      type: "editProductRequest",
-    });
-
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    dispatch({ type: "editProductRequest" });
 
     const { data } = await axios.put(
-      `${server}/product/edit-product/${id}`,
-      updatedForm,
-      config
+      `${server}/product/update-product/${id}`,
+      updatedData
     );
 
     dispatch({
@@ -117,8 +111,19 @@ export const editProduct = (id, updatedForm) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "editProductFail",
+      type: "editProductFailed",
       payload: error.response.data.message,
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+

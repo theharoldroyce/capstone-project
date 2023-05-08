@@ -63,15 +63,18 @@ export const productReducer = createReducer(initialState, {
     state.isLoading = true;
   },
   editProductSuccess: (state, action) => {
+    const updatedProduct = action.payload;
+    state.products = state.products.map((product) =>
+      product._id === updatedProduct._id ? updatedProduct : product
+    );
     state.isLoading = false;
-    state.product = action.payload;
-    state.success = true;
   },
-  editProductFail: (state, action) => {
+  editProductFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
     state.success = false;
   },
+
   clearErrors: (state) => {
     state.error = null;
   },

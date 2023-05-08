@@ -1,11 +1,11 @@
-import { Button } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
-import React, { useEffect } from "react";
-import { AiOutlineDelete, AiOutlineEye,AiOutlineEdit } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import { AiOutlineDelete, AiOutlineEye, AiOutlineEdit } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/product";
-import { deleteProduct, editProduct } from "../../redux/actions/product";
+import { getAllProductsShop, editProduct } from "../../redux/actions/product";
+import { deleteProduct } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 
 const AllProducts = () => {
@@ -13,6 +13,11 @@ const AllProducts = () => {
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [productId, setProductId] = useState("");
+  const [name, setName] = useState("");
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [stock, setStock] = useState("");
 
   useEffect(() => {
     dispatch(getAllProductsShop(seller._id));
@@ -23,28 +28,29 @@ const AllProducts = () => {
     window.location.reload();
   };
 
-  const handleEdit = (id) => {
-    dispatch(editProduct(id));
-    window.location.reload();
+  const handleEdit = (id, name, discountPrice, stock) => {
+    setProductId(id);
+    setName(name);
+    setDiscountPrice(discountPrice);
+    setStock(stock);
+    setOpenDialog(true);
   };
 
-  const handleUpdate = (params) => {
-    const { id, field, value } = params;
-    const updatedProduct = {
-      _id: id,
-      [field]: value,
+  const handleUpdate = () => {
+    const updatedData = {
+      name: name,
+      discountPrice: discountPrice,
+      stock: stock,
     };
-    dispatch(editProduct(updatedProduct));
+
+    dispatch(editProduct(productId, updatedData));
+    setOpenDialog(false);
   };
 
-  const handleCellEdit = (params) => {
-    const { id, field, value } = params;
-    const product = products.find((p) => p._id === id);
-    if (product) {
-      product[field] = value;
-      dispatch(editProduct(product));
-    }
+  const handleClose = () => {
+    setOpenDialog(false);
   };
+
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 180, flex: 0.7 },
@@ -107,7 +113,7 @@ const AllProducts = () => {
       renderCell: (params) => {
         return (
           <>
-            <Button onClick={() => handleEdit(params.id)}>
+            <Button onClick={() => handleEdit(params.id, params.name, params.discountPrice, params.stock)}>
               <AiOutlineEdit size={20} />
             </Button>
           </>
@@ -159,10 +165,40 @@ const AllProducts = () => {
             pageSize={10}
             disableSelectionOnClick
             autoHeight
-            onEditCellChange={(params) => handleCellEdit(params)}
           />
         </div>
       )}
+      <Dialog open={openDialog} onClose={handleClose}>
+        <DialogTitle>Edit Product</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="Price"
+            value={discountPrice}
+            onChange={(e) => setDiscountPrice(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="Stock"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdate} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
