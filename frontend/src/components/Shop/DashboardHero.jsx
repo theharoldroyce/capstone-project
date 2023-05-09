@@ -330,6 +330,7 @@ const DashboardHero = () => {
           </div>
         </div>
       </div>
+      
       <br />
       <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">

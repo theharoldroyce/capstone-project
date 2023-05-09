@@ -155,6 +155,7 @@ export const getLastWeekSale = () => async (dispatch) => {
   }
 };
 
+
 // get total sales for the current month with status "Delivered"
 export const getMonthSale = () => async (dispatch) => {
   try {
@@ -198,6 +199,7 @@ export const getLastMonthSale = () => async (dispatch) => {
   }
 };
 
+
 // get total sales for the current year with status "Delivered"
 export const getYearSale = () => async (dispatch) => {
   try {
@@ -218,6 +220,7 @@ export const getYearSale = () => async (dispatch) => {
     });
   }
 };
+
 
 // get total sales for the last year with status "Delivered"
 export const getLastYearSale = () => async (dispatch) => {

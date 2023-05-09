@@ -133,7 +133,7 @@ router.put(
 
       async function updateSellerInfo(amount) {
         const seller = await Shop.findById(req.seller.id);
-        
+
         seller.availableBalance = amount;
 
         await seller.save();
@@ -288,7 +288,6 @@ router.get(
     }
   })
 );
-
 
 // get total sales for the current month with status "Delivered"
 router.get(
@@ -474,6 +473,544 @@ router.get(
   })
 );
 
+// get all current day orders
+router.get(
+  "/current-day-orders",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+      const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
 
+      const orders = await Order.find({
+        createdAt: { $gte: startOfDay, $lt: endOfDay },
+      });
+
+      res.status(200).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// Count all orders on the current day
+router.get(
+  "/count-orders-today",
+  async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+      const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+
+      const count = await Order.countDocuments({
+        createdAt: { $gte: startOfDay, $lt: endOfDay },
+      });
+
+      res.status(200).json({
+        success: true,
+        count,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+);
+
+// Count all orders on the previous day
+router.get("/count-orders-previous-day", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const previousDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 1
+    );
+    const startOfDay = new Date(
+      previousDate.getFullYear(),
+      previousDate.getMonth(),
+      previousDate.getDate()
+    );
+    const endOfDay = new Date(
+      previousDate.getFullYear(),
+      previousDate.getMonth(),
+      previousDate.getDate() + 1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfDay, $lt: endOfDay },
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the current week
+router.get("/count-orders-current-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() + 7
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the previous week
+router.get("/count-orders-previous-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() - 7
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the current month
+router.get("/count-orders-current-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the previous month
+router.get("/count-orders-previous-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+// Count orders for the current day with status "delivered"
+router.get("/delivered-orders-current-day", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+    const endOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + 1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfDay, $lt: endOfDay },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the previous day with status "delivered"
+router.get("/delivered-orders-previous-day", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 1
+    );
+    const endOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfDay, $lt: endOfDay },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the current week with status "delivered"
+router.get("/delivered-orders-current-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() + 7
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the previous week with status "delivered"
+router.get("/delivered-orders-previous-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() - 7
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the current month with status "delivered"
+router.get("/delivered-orders-current-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the previous month with status "delivered"
+router.get("/delivered-orders-previous-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+      status: "delivered",
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// Count orders for the current day with status "transfer to delivery partner"
+router.get("/tdf-current-day", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+    const endOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + 1
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfDay, $lt: endOfDay },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+// Count orders for the previous day with status "transfer to delivery partner"
+router.get("/tdf-previous-day", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 1
+    );
+    const endOfDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfDay, $lt: endOfDay },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+// Count orders for the current week with status "transfer to delivery partner"
+router.get("/tdf-current-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() + 7
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+// Count orders for the previous week with status "transfer to delivery partner"
+router.get("/tdf-previous-week", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay() - 7
+    );
+    const endOfWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
+// Count orders for the current month with status "transfer to delivery partner"
+router.get("/tdf-current-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(), currentDate.getMonth(),
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
+    );
+    const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+})
+
+// Count orders for the previous month with status "transfer to delivery partner"
+router.get("/tdf-previous-month", async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      1
+    );
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    ); const count = await Order.countDocuments({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+      status: "Transferred to delivery partner"
+    });
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 module.exports = router;
