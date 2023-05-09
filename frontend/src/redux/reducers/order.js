@@ -11,7 +11,18 @@ const initialState = {
   totalLastMonthSales: 0, // Initial state of total last month sales
   totalYearSales: 0, // Initial state of total year sales
   totalLYearSales: 0, // Initial state of total last year sales
-
+  countCD: 0,
+  countPD: 0,
+  countCW: 0,
+  countPW: 0,
+  countCM: 0,
+  countPM: 0,
+  countCDD: 0,
+  countPDD: 0,
+  countCWD: 0,
+  countPWD: 0,
+  countCMD: 0,
+  countPMD: 0,
 };
 
 export const orderReducer = createReducer(initialState, {
@@ -144,7 +155,7 @@ export const orderReducer = createReducer(initialState, {
     state.isLoading = false;
     state.error = action.payload;
   },
- 
+
 
   // get total sales for the last year with status "Delivered"
   getLastYearSaleRequest: (state) => {
@@ -159,7 +170,161 @@ export const orderReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  // Count all orders on the current day
+  getCurrentDayOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrentDayOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCD = action.payload;
+  },
+  getCurrentDayOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
 
+  // Count all orders on the previous day
+  getPreDayOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreDayOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPD = action.payload;
+  },
+  getPreDayOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current week
+  getCurrentWeekOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrentWeekOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCW = action.payload;
+  },
+  getCurrentWeekOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous week
+  getPreWeekOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreWeekOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPW = action.payload;
+  },
+  getPreWeekOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current month
+  getCurrentmonthOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrentmonthOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCM = action.payload;
+  },
+  getCurrentmonthOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous month
+  getPreMonthOrderRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreMonthOrderSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPM = action.payload;
+  },
+  getPreMonthOrderFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous month
+  getCurrDayDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrDayDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCDD = action.payload;
+  },
+  getCurrDayDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous day with status "delivered"
+  getPreDayDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreDayDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPDD = action.payload;
+  },
+  getPreDayDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current week with status "delivered"
+  getCurrWeekDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrWeekDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCWD = action.payload;
+  },
+  getCurrWeekDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous week with status "delivered" 
+  getPreWeekDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreWeekDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPWD = action.payload;
+  },
+  getPreWeekDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current month with status "delivered"
+  getCurrMonthDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrMonthDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCMD = action.payload;
+  },
+  getCurrMonthDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous month with status "delivered"
+  getPreMonthDeliveredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreMonthDeliveredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPMD = action.payload;
+  },
+  getPreMonthDeliveredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
 
   clearErrors: (state) => {
     state.error = null;

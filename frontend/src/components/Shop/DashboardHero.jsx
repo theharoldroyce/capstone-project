@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineArrowRight, AiOutlineMoneyCollect } from "react-icons/ai";
-import { FcSalesPerformance } from "react-icons/fc";
+import {
+  FcSalesPerformance,
+  FcInTransit,
+  FcPackage,
+  FcShipped,
+} from "react-icons/fc";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { MdBorderClear } from "react-icons/md";
@@ -16,7 +21,19 @@ import {
   getMonthSale,
   getLastMonthSale,
   getYearSale,
-  getLastYearSale
+  getLastYearSale,
+  getCurrentDayOrder,
+  getPreDayOrder,
+  getCurrentWeekOrder,
+  getPreWeekOrder,
+  getCurrentmonthOrder,
+  getPreMonthOrder,
+  getCurrDayDelivered,
+  getPreDayDelivered,
+  getCurrWeekDelivered,
+  getPreWeekDelivered,
+  getCurrMonthDelivered,
+  getPreMonthDelivered
 } from "../../redux/actions/order";
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
@@ -37,16 +54,46 @@ const DashboardHero = () => {
     totalMonthSales,
     totalLastMonthSales,
     totalYearSales,
-    totalLYearSales
+    totalLYearSales,
+    countCD,
+    countPD,
+    countCW,
+    countPW,
+    countCM,
+    countPM,
+    countCDD,
+    countPDD,
+    countCWD,
+    countPWD,
+    countCMD,
+    countPMD,
   } = useSelector((state) => state.order);
 
- 
+
   const [todaySales, setTodaySales] = useState(0);
+  const [todayOrder, setTodayOrder] = useState(0);
+  const [todayDelivered , setTodayDelivered ] = useState(0);
+
   const [yesterdaySales, setYesterdaySales] = useState(0);
+  const [yesterdayOrder, setYesterdayOrder] = useState(0);
+  const [yesterdayDelivered , setYesterdayDelivered ] = useState(0);
+
   const [weekSales, setWeekSales] = useState(0);
+  const [weekOrder, setWeekOrder] = useState(0);
+  const [weekDelivered , setWeekDelivered ] = useState(0);
+
   const [lastWeektSales, setLastWeekSales] = useState(0);
+  const [lastWeekOrder, setLastWeekOrder] = useState(0);
+  const [lastWeekDelivered , setLastWeekDelivered ] = useState(0);
+
   const [monthSales, setMonthSales] = useState(0);
+  const [monthOrder, setMonthOrder] = useState(0);
+  const [monthDelivered , setMonthDelivered ] = useState(0);
+
   const [lMonthSales, setLMonthSales] = useState(0);
+  const [lMonthOrder, setLMonthOrder] = useState(0);
+  const [lMonthDelivered , setLMonthDelivered ] = useState(0);
+
   const [yearSales, setYearSales] = useState(0);
   const [lastYearSales, setLastYearSales] = useState(0);
 
@@ -64,21 +111,65 @@ const DashboardHero = () => {
     dispatch(getLastMonthSale());
     dispatch(getYearSale());
     dispatch(getLastYearSale());
+    dispatch(getCurrentDayOrder());
+    dispatch(getPreDayOrder());
+    dispatch(getCurrentWeekOrder());
+    dispatch(getPreWeekOrder());
+    dispatch(getCurrentmonthOrder());
+    dispatch(getPreMonthOrder());
+    dispatch(getCurrDayDelivered());
+    dispatch(getPreDayDelivered());
+    dispatch(getCurrWeekDelivered());
+    dispatch(getPreWeekDelivered());
+    dispatch(getCurrMonthDelivered());
+    dispatch(getPreMonthDelivered());
   }, [dispatch]);
 
   useEffect(() => {
     setTodaySales(totalSales);
+    setTodayOrder(countCD);
+    setTodayDelivered (countCDD);
     setYesterdaySales(totalySales);
+    setYesterdayOrder(countPD);
+    setYesterdayDelivered (countPDD);
     setWeekSales(totalwSales);
+    setWeekOrder(countCW);
+    setWeekDelivered (countCWD);
     setLastWeekSales(totalLastSales);
+    setLastWeekOrder(countPW);
+    setLastWeekDelivered (countPWD);
     setMonthSales(totalMonthSales);
+    setMonthOrder(countCM);
+    setMonthDelivered (countCMD);
     setLMonthSales(totalLastMonthSales);
+    setLMonthOrder(countPM);
+    setLMonthDelivered (countPMD);
     setYearSales(totalYearSales);
     setLastYearSales(totalLYearSales);
-  }, [totalSales, totalySales, totalwSales, totalLastSales, totalMonthSales,totalLastMonthSales,totalYearSales,totalLYearSales]);
+  }, [
+    totalSales,
+    countCD,
+    totalySales,
+    countPD,
+    countPDD,
+    totalwSales,
+    countCW,
+    countCWD,
+    totalLastSales,
+    countPW,
+    countPWD,
+    totalMonthSales,
+    countCM,
+    countCMD,
+    totalLastMonthSales,
+    countPM,
+    countPMD,
+    totalYearSales,
+    totalLYearSales
+  ]);
 
   console.log(yearSales)
-  
+
   const availableBalance = seller?.availableBalance.toFixed(2);
 
   const adminEarning = adminOrders && adminOrders.reduce((acc, item) => acc + item.totalPrice, 0);
@@ -162,7 +253,7 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Total Earning{" "}
+              Total Placed Order{" "}
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {adminBalance}</h5>
@@ -202,8 +293,10 @@ const DashboardHero = () => {
           </Link>
         </div>
       </div>
+
       <br />
-      <div className="w-full block 800px:flex items-center justify-between">
+
+      {/* <div className="w-full block 800px:flex items-center justify-between">
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
             <FcSalesPerformance
@@ -292,9 +385,395 @@ const DashboardHero = () => {
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lMonthSales}.00</h5>
         </div>
-      </div>
+      </div> */}
 
+      <br />  {/* today Overview */}
+      <h3 className="text-[22px] font-Poppins pb-2">Today's Overview</h3>
+      <div className="w-full block 800px:flex items-center justify-between gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Today's Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {todayOrder} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Today's Shipped Out{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Today's Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {todayDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Today's Earning's{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {todaySales}.00</h5>
+        </div>
+      </div>
+      <h3 className="text-[22px] font-Poppins pb-2">Previous Day Overview</h3>
+      <div className="w-full block 800px:flex items-center justify-between gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Day Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {yesterdayOrder} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h5
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Day Shipped Out{" "}
+            </h5>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Day Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {yesterdayDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Day Earning's{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {yesterdaySales}.00</h5>
+        </div>
+      </div>
       <br />
+      <br />
+      <h3 className="text-[22px] font-Poppins pb-2">Current Week Overview</h3>
+      <div className="w-full block 800px:flex items-center justify-between gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Week Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {weekOrder}</h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h5
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Week Shipped Out{" "}
+            </h5>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Week Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {weekDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Week Earning{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {weekSales}.00</h5>
+        </div>
+      </div>
+      <h3 className="text-[22px] font-Poppins pb-2">Previous Week Overview</h3>
+      <div className="w-full block 800px:flex items-center justify-between gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Week Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lastWeekOrder} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h5
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Week Shipped Out{" "}
+            </h5>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Week Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lastWeekDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Week Earning{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lastWeektSales}.00</h5>
+        </div>
+      </div>
+      <br />
+      <br />
+      <h3 className="text-[22px] font-Poppins pb-2">Current Month Overview</h3>
+      <div className="w-full block 800px:flex items-center gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Month Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {monthOrder} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h5
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Month Shipped Out{" "}
+            </h5>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Month Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {monthDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Current Month Earning{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {monthSales}.00</h5>
+        </div>
+      </div>
+      <h3 className="text-[22px] font-Poppins pb-2">Previous Month Overview</h3>
+      <div className="w-full block 800px:flex items-center gap-2">
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcPackage
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Month Order{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lMonthOrder} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcInTransit
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h5
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Month Shipped Out{" "}
+            </h5>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcShipped
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Month Delivered{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lMonthDelivered} </h5>
+        </div>
+        <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
+          <div className="flex items-center">
+            <FcSalesPerformance
+              size={20}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h4
+              className={`${styles.productTitle} !text-[15px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              Previous Month Earning{" "}
+            </h4>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {lMonthSales}.00</h5>
+        </div>
+      </div>
+      <br />
+
+
+
       <div>
         <div className="w-full block 800px:flex items-center justify-around">
           <div className="w-full mb-4 800px:w-[30%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
@@ -311,7 +790,7 @@ const DashboardHero = () => {
               </h3>
             </div>
             <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {yearSales}.00</h5>
-           
+
           </div>
           <div className="w-full mb-4 800px:w-[30%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
             <div className="flex items-center">
@@ -330,7 +809,7 @@ const DashboardHero = () => {
           </div>
         </div>
       </div>
-      
+
       <br />
       <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">

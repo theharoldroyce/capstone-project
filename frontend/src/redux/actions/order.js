@@ -242,3 +242,256 @@ export const getLastYearSale = () => async (dispatch) => {
     });
   }
 };
+
+// Count all orders on the current day
+export const getCurrentDayOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrentDayOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-today`);
+
+    dispatch({
+      type: "getCurrentDayOrderSuccess",
+      payload: data.countCD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrentDayOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count all orders on the previous day
+export const getPreDayOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreDayOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-previous-day`);
+
+    dispatch({
+      type: "getPreDayOrderSuccess",
+      payload: data.countPD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreDayOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current week
+export const getCurrentWeekOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrentWeekOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-current-week`);
+
+    dispatch({
+      type: "getCurrentWeekOrderSuccess",
+      payload: data.countCW,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrentWeekOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous week
+export const getPreWeekOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreWeekOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-previous-week`);
+
+    dispatch({
+      type: "getPreWeekOrderSuccess",
+      payload: data.countPW,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreWeekOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current month
+export const getCurrentmonthOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrentmonthOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-current-month`);
+
+    dispatch({
+      type: "getCurrentmonthOrderSuccess",
+      payload: data.countCM,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrentmonthOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous month
+export const getPreMonthOrder = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreMonthOrderRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/count-orders-previous-month`);
+
+    dispatch({
+      type: "getPreMonthOrderSuccess",
+      payload: data.countPM,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreMonthOrderFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current day with status "delivered"
+export const getCurrDayDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrDayDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-current-day`);
+
+    dispatch({
+      type: "getCurrDayDeliveredSuccess",
+      payload: data.countCDD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrDayDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// Count orders for the previous day with status "delivered"
+export const getPreDayDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreDayDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-previous-day`);
+
+    dispatch({
+      type: "getPreDayDeliveredSuccess",
+      payload: data.countPDD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreDayDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current week with status "delivered"
+export const getCurrWeekDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrWeekDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-current-week`);
+
+    dispatch({
+      type: "getCurrWeekDeliveredSuccess",
+      payload: data.countCWD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrWeekDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous week with status "delivered"
+export const getPreWeekDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreWeekDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-previous-week`);
+
+    dispatch({
+      type: "getPreWeekDeliveredSuccess",
+      payload: data.countPWD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreWeekDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current month with status "delivered"
+export const getCurrMonthDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrMonthDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-current-month`);
+
+    dispatch({
+      type: "getCurrMonthDeliveredSuccess",
+      payload: data.countCMD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrMonthDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous month with status "delivered"
+export const getPreMonthDelivered = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreMonthDeliveredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/delivered-orders-previous-month`);
+
+    dispatch({
+      type: "getPreMonthDeliveredSuccess",
+      payload: data.countPMD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreMonthDeliveredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

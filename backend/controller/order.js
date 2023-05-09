@@ -505,13 +505,13 @@ router.get(
       const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
       const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
 
-      const count = await Order.countDocuments({
+      const countCD = await Order.countDocuments({
         createdAt: { $gte: startOfDay, $lt: endOfDay },
       });
 
       res.status(200).json({
         success: true,
-        count,
+        countCD,
       });
     } catch (error) {
       return next(error);
@@ -539,13 +539,13 @@ router.get("/count-orders-previous-day", async (req, res, next) => {
       previousDate.getDate() + 1
     );
 
-    const count = await Order.countDocuments({
+    const countPD = await Order.countDocuments({
       createdAt: { $gte: startOfDay, $lt: endOfDay },
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPD,
     });
   } catch (error) {
     return next(error);
@@ -567,13 +567,13 @@ router.get("/count-orders-current-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay() + 7
     );
 
-    const count = await Order.countDocuments({
+    const countCW = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCW,
     });
   } catch (error) {
     return next(error);
@@ -595,13 +595,13 @@ router.get("/count-orders-previous-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay()
     );
 
-    const count = await Order.countDocuments({
+    const countPW = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPW,
     });
   } catch (error) {
     return next(error);
@@ -623,13 +623,13 @@ router.get("/count-orders-current-month", async (req, res, next) => {
       1
     );
 
-    const count = await Order.countDocuments({
+    const countCM = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCM,
     });
   } catch (error) {
     return next(error);
@@ -651,13 +651,13 @@ router.get("/count-orders-previous-month", async (req, res, next) => {
       1
     );
 
-    const count = await Order.countDocuments({
+    const countPM = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPM,
     });
   } catch (error) {
     return next(error);
@@ -680,14 +680,14 @@ router.get("/delivered-orders-current-day", async (req, res, next) => {
       currentDate.getDate() + 1
     );
 
-    const count = await Order.countDocuments({
+    const countCDD = await Order.countDocuments({
       createdAt: { $gte: startOfDay, $lt: endOfDay },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countDD,
     });
   } catch (error) {
     return next(error);
@@ -709,14 +709,14 @@ router.get("/delivered-orders-previous-day", async (req, res, next) => {
       currentDate.getDate()
     );
 
-    const count = await Order.countDocuments({
+    const countPDD = await Order.countDocuments({
       createdAt: { $gte: startOfDay, $lt: endOfDay },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPDD,
     });
   } catch (error) {
     return next(error);
@@ -738,14 +738,14 @@ router.get("/delivered-orders-current-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay() + 7
     );
 
-    const count = await Order.countDocuments({
+    const countCWD = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCWD,
     });
   } catch (error) {
     return next(error);
@@ -767,14 +767,14 @@ router.get("/delivered-orders-previous-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay()
     );
 
-    const count = await Order.countDocuments({
+    const countPWD = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPWD,
     });
   } catch (error) {
     return next(error);
@@ -796,14 +796,14 @@ router.get("/delivered-orders-current-month", async (req, res, next) => {
       1
     );
 
-    const count = await Order.countDocuments({
+    const countCMD = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCMD,
     });
   } catch (error) {
     return next(error);
@@ -825,14 +825,14 @@ router.get("/delivered-orders-previous-month", async (req, res, next) => {
       1
     );
 
-    const count = await Order.countDocuments({
+    const countPMD = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      status: "delivered",
+      status: "Delivered",
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPMD,
     });
   } catch (error) {
     return next(error);
