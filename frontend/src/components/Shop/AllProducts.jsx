@@ -16,6 +16,7 @@ const AllProducts = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
   const [discountPrice, setDiscountPrice] = useState("");
   const [stock, setStock] = useState("");
 
@@ -31,6 +32,7 @@ const AllProducts = () => {
   const handleEdit = (id, name, discountPrice, stock) => {
     setProductId(id);
     setName(name);
+    setCategory(category)
     setDiscountPrice(discountPrice);
     setStock(stock);
     setOpenDialog(true);
@@ -39,6 +41,7 @@ const AllProducts = () => {
   const handleUpdate = () => {
     const updatedData = {
       name: name,
+      category: category,
       discountPrice: discountPrice,
       stock: stock,
     };
@@ -51,27 +54,35 @@ const AllProducts = () => {
     setOpenDialog(false);
   };
 
+  useEffect(() => {
+    if (products && products.length > 0) {
+      const product = products.find((item) => item._id === productId);
+      if (product) {
+        setName(product.name);
+        setCategory(product.category);
+        setDiscountPrice(product.discountPrice);
+        setStock(product.stock);
+      }
+    }
+  }, [products, productId]);
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 180, flex: 0.7 },
     {
       field: "name",
       headerName: "Name",
-      editable: true,
       minWidth: 180,
       flex: 1.4,
     },
     {
       field: "price",
       headerName: "Price",
-      editable: true,
       minWidth: 100,
       flex: 0.6,
     },
     {
       field: "Stock",
       headerName: "Stock",
-      editable: true,
       minWidth: 130,
       flex: 0.6,
       type: "number",
@@ -168,13 +179,28 @@ const AllProducts = () => {
           />
         </div>
       )}
-      <Dialog open={openDialog} onClose={handleClose}>
+      <Dialog
+        open={openDialog}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            width: '500px' // Adjust the width as per your requirements
+          }
+        }}>
         <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <TextField
             label="Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            disabled
+            // onChange={(e) => setName(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="Category"
+            value={category}
+            disabled
+            // onChange={(e) => setCategory(e.target.value)}
             fullWidth
           />
           <TextField
