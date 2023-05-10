@@ -23,6 +23,12 @@ const initialState = {
   countPWD: 0,
   countCMD: 0,
   countPMD: 0,
+  countCTD: 0,
+  countPTD: 0,
+  countCTW: 0,
+  countPTW: 0,
+  countCTM: 0,
+  countPTM: 0,
 };
 
 export const orderReducer = createReducer(initialState, {
@@ -155,7 +161,6 @@ export const orderReducer = createReducer(initialState, {
     state.isLoading = false;
     state.error = action.payload;
   },
-
 
   // get total sales for the last year with status "Delivered"
   getLastYearSaleRequest: (state) => {
@@ -325,6 +330,85 @@ export const orderReducer = createReducer(initialState, {
     state.isLoading = false;
     state.error = action.payload;
   },
+
+  // Count orders for the current day with status "transfer to delivery partner"
+  getCurrDayTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrDayTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCTD = action.payload;
+  },
+  getCurrDayTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous day with status "transfer to delivery partner"
+  getPreDayTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreDayTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPTD = action.payload;
+  },
+  getPreDayTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current week with status "transfer to delivery partner"
+  getCurrWeekTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrWeekTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCTW = action.payload;
+  },
+  getCurrWeekTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous week with status "transfer to delivery partner"
+  getPreWeekTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreWeekTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPTW = action.payload;
+  },
+  getPreWeekTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the current month with status "transfer to delivery partner"
+  getCurrMonthTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getCurrMonthTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countCTM = action.payload;
+  },
+  getCurrMonthTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+  // Count orders for the previous month with status "transfer to delivery partner"
+  getPreMonthTransferredRequest: (state) => {
+    state.isLoading = true;
+  },
+  getPreMonthTransferredSuccess: (state, action) => {
+    state.isLoading = false;
+    state.countPTM = action.payload;
+  },
+  getPreMonthTransferredFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
 
   clearErrors: (state) => {
     state.error = null;

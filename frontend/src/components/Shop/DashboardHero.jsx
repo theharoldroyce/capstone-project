@@ -5,6 +5,8 @@ import {
   FcInTransit,
   FcPackage,
   FcShipped,
+  FcInternal,
+  FcExternal,
 } from "react-icons/fc";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
@@ -33,7 +35,13 @@ import {
   getCurrWeekDelivered,
   getPreWeekDelivered,
   getCurrMonthDelivered,
-  getPreMonthDelivered
+  getPreMonthDelivered,
+  getCurrDayTransferred,
+  getPreDayTransferred,
+  getCurrWeekTransferred,
+  getPreWeekTransferred,
+  getCurrMonthTransferred,
+  getPreMonthTransferred,
 } from "../../redux/actions/order";
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
@@ -67,32 +75,44 @@ const DashboardHero = () => {
     countPWD,
     countCMD,
     countPMD,
+    countCTD,
+    countPTD,
+    countCTW,
+    countPTW,
+    countCTM,
+    countPTM,
   } = useSelector((state) => state.order);
 
 
   const [todaySales, setTodaySales] = useState(0);
   const [todayOrder, setTodayOrder] = useState(0);
-  const [todayDelivered , setTodayDelivered ] = useState(0);
+  const [todayDelivered, setTodayDelivered] = useState(0);
+  const [todayTransferred, setTodayTransferred] = useState(0);
 
   const [yesterdaySales, setYesterdaySales] = useState(0);
   const [yesterdayOrder, setYesterdayOrder] = useState(0);
-  const [yesterdayDelivered , setYesterdayDelivered ] = useState(0);
+  const [yesterdayDelivered, setYesterdayDelivered] = useState(0);
+  const [yesterdayTransferred, setYesterdayTransferred] = useState(0);
 
   const [weekSales, setWeekSales] = useState(0);
   const [weekOrder, setWeekOrder] = useState(0);
-  const [weekDelivered , setWeekDelivered ] = useState(0);
+  const [weekDelivered, setWeekDelivered] = useState(0);
+  const [weekTransferred, setWeekTransferred] = useState(0);
 
   const [lastWeektSales, setLastWeekSales] = useState(0);
   const [lastWeekOrder, setLastWeekOrder] = useState(0);
-  const [lastWeekDelivered , setLastWeekDelivered ] = useState(0);
+  const [lastWeekDelivered, setLastWeekDelivered] = useState(0);
+  const [lastWeekTransferred, setLastWeekTransferred] = useState(0);
 
   const [monthSales, setMonthSales] = useState(0);
   const [monthOrder, setMonthOrder] = useState(0);
-  const [monthDelivered , setMonthDelivered ] = useState(0);
+  const [monthDelivered, setMonthDelivered] = useState(0);
+  const [monthTransferred, setMonthTransferred] = useState(0);
 
   const [lMonthSales, setLMonthSales] = useState(0);
   const [lMonthOrder, setLMonthOrder] = useState(0);
-  const [lMonthDelivered , setLMonthDelivered ] = useState(0);
+  const [lMonthDelivered, setLMonthDelivered] = useState(0);
+  const [lMonthTransferred, setLMonthTransferred] = useState(0);
 
   const [yearSales, setYearSales] = useState(0);
   const [lastYearSales, setLastYearSales] = useState(0);
@@ -123,47 +143,72 @@ const DashboardHero = () => {
     dispatch(getPreWeekDelivered());
     dispatch(getCurrMonthDelivered());
     dispatch(getPreMonthDelivered());
+    dispatch(getCurrDayTransferred());
+    dispatch(getPreDayTransferred());
+    dispatch(getCurrWeekTransferred());
+    dispatch(getPreWeekTransferred());
+    dispatch(getCurrMonthTransferred());
+    dispatch(getPreMonthTransferred());
   }, [dispatch]);
 
   useEffect(() => {
     setTodaySales(totalSales);
     setTodayOrder(countCD);
-    setTodayDelivered (countCDD);
+    setTodayDelivered(countCDD);
+    setTodayTransferred(countCTD);
+
     setYesterdaySales(totalySales);
     setYesterdayOrder(countPD);
-    setYesterdayDelivered (countPDD);
+    setYesterdayDelivered(countPDD);
+    setYesterdayTransferred(countPTD);
+
     setWeekSales(totalwSales);
     setWeekOrder(countCW);
-    setWeekDelivered (countCWD);
+    setWeekDelivered(countCWD);
+    setWeekTransferred(countCTW);
+
     setLastWeekSales(totalLastSales);
     setLastWeekOrder(countPW);
-    setLastWeekDelivered (countPWD);
+    setLastWeekDelivered(countPWD);
+    setLastWeekTransferred(countPTW);
+
     setMonthSales(totalMonthSales);
     setMonthOrder(countCM);
-    setMonthDelivered (countCMD);
+    setMonthDelivered(countCMD);
+    setMonthTransferred(countCTM);
+
     setLMonthSales(totalLastMonthSales);
     setLMonthOrder(countPM);
-    setLMonthDelivered (countPMD);
+    setLMonthDelivered(countPMD);
+    setLMonthTransferred(countPTM);
+
     setYearSales(totalYearSales);
     setLastYearSales(totalLYearSales);
   }, [
     totalSales,
     countCD,
+    countCDD,
+    countCTD,
     totalySales,
     countPD,
     countPDD,
+    countPTD,
     totalwSales,
     countCW,
     countCWD,
+    countCTW,
     totalLastSales,
     countPW,
     countPWD,
+    countPTW,
     totalMonthSales,
     countCM,
     countCMD,
+    countCTM,
     totalLastMonthSales,
     countPM,
     countPMD,
+    countPTM,
     totalYearSales,
     totalLYearSales
   ]);
@@ -244,8 +289,8 @@ const DashboardHero = () => {
       <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
       <div className="w-full block 800px:flex items-center justify-between">
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
-          <div className="flex items-center">
-            <AiOutlineMoneyCollect
+          <div className="flex items-center ">
+            <FcInternal
               size={30}
               className="mr-2"
               fill="#00000085"
@@ -253,10 +298,24 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Total Placed Order{" "}
+              Total Earning's{" "}
             </h3>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">₱ {adminBalance}</h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500] ">₱ {totalYearSales}.00</h5>
+          <br/>
+          <div className="flex items-center">
+            <FcExternal
+              size={30}
+              className="mr-2"
+              fill="#00000085"
+            />
+            <h3
+              className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
+            >
+              UpComing Earning's{" "}
+            </h3>
+          </div>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500] ">₱ {adminBalance}</h5>
         </div>
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
@@ -418,7 +477,7 @@ const DashboardHero = () => {
               Today's Shipped Out{" "}
             </h4>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {todayTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -481,7 +540,7 @@ const DashboardHero = () => {
               Previous Day Shipped Out{" "}
             </h5>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {yesterdayTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -546,7 +605,7 @@ const DashboardHero = () => {
               Current Week Shipped Out{" "}
             </h5>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {weekTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -609,7 +668,7 @@ const DashboardHero = () => {
               Previous Week Shipped Out{" "}
             </h5>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lastWeekTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -674,7 +733,7 @@ const DashboardHero = () => {
               Current Month Shipped Out{" "}
             </h5>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {monthTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -737,7 +796,7 @@ const DashboardHero = () => {
               Previous Month Shipped Out{" "}
             </h5>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> </h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]"> {lMonthTransferred} </h5>
         </div>
         <div className="w-full mb-4 800px:w-[25%] min-h-[15vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">

@@ -495,3 +495,129 @@ export const getPreMonthDelivered = () => async (dispatch) => {
     });
   }
 };
+
+// Count orders for the current day with status "transfer to delivery partner"
+export const getCurrDayTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrDayTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-current-day`);
+
+    dispatch({
+      type: "getCurrDayTransferredSuccess",
+      payload: data.countCTD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrDayTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous day with status "transfer to delivery partner"
+export const getPreDayTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreDayTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-previous-day`);
+
+    dispatch({
+      type: "getPreDayTransferredSuccess",
+      payload: data.countPTD,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreDayTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current week with status "transfer to delivery partner"
+export const getCurrWeekTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrWeekTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-current-week`);
+
+    dispatch({
+      type: "getCurrWeekTransferredSuccess",
+      payload: data.countCTW,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrWeekTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous week with status "transfer to delivery partner"
+export const getPreWeekTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreWeekTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-previous-week`);
+
+    dispatch({
+      type: "getPreWeekTransferredSuccess",
+      payload: data.countPTW,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreWeekTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the current month with status "transfer to delivery partner"
+export const getCurrMonthTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getCurrMonthTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-current-month`);
+
+    dispatch({
+      type: "getCurrMonthTransferredSuccess",
+      payload: data.countCTM,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getCurrMonthTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Count orders for the previous month with status "transfer to delivery partner"
+export const getPreMonthTransferred = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getPreMonthTransferredRequest",
+    });
+
+    const { data } = await axios.get(`${server}/order/tdf-previous-month`);
+
+    dispatch({
+      type: "getPreMonthTransferredSuccess",
+      payload: data.countPTM,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getPreMonthTransferredFailed",
+      payload: error.response.data.message,
+    });
+  }
+};

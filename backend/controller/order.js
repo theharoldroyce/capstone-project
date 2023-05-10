@@ -687,7 +687,7 @@ router.get("/delivered-orders-current-day", async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      countDD,
+      countCDD,
     });
   } catch (error) {
     return next(error);
@@ -854,14 +854,14 @@ router.get("/tdf-current-day", async (req, res, next) => {
       currentDate.getDate() + 1
     );
 
-    const count = await Order.countDocuments({
+    const countCTD = await Order.countDocuments({
       createdAt: { $gte: startOfDay, $lt: endOfDay },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCTD,
     });
   } catch (error) {
     return next(error);
@@ -884,14 +884,14 @@ router.get("/tdf-previous-day", async (req, res, next) => {
       currentDate.getDate()
     );
 
-    const count = await Order.countDocuments({
+    const countPTD = await Order.countDocuments({
       createdAt: { $gte: startOfDay, $lt: endOfDay },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPTD,
     });
   } catch (error) {
     return next(error);
@@ -914,14 +914,14 @@ router.get("/tdf-current-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay() + 7
     );
 
-    const count = await Order.countDocuments({
+    const countCTW = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCTW,
     });
   } catch (error) {
     return next(error);
@@ -944,14 +944,14 @@ router.get("/tdf-previous-week", async (req, res, next) => {
       currentDate.getDate() - currentDate.getDay()
     );
 
-    const count = await Order.countDocuments({
+    const countPTW = await Order.countDocuments({
       createdAt: { $gte: startOfWeek, $lt: endOfWeek },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPTW,
     });
   } catch (error) {
     return next(error);
@@ -972,14 +972,14 @@ router.get("/tdf-current-month", async (req, res, next) => {
       currentDate.getMonth() + 1,
       1
     );
-    const count = await Order.countDocuments({
+    const countCTM = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countCTM,
     });
   } catch (error) {
     return next(error);
@@ -999,14 +999,14 @@ router.get("/tdf-previous-month", async (req, res, next) => {
       currentDate.getFullYear(),
       currentDate.getMonth(),
       1
-    ); const count = await Order.countDocuments({
+    ); const countPTM = await Order.countDocuments({
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
       status: "Transferred to delivery partner"
     });
 
     res.status(200).json({
       success: true,
-      count,
+      countPTM,
     });
   } catch (error) {
     return next(error);
