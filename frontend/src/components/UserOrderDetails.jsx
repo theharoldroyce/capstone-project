@@ -51,13 +51,13 @@ const UserOrderDetails = () => {
         toast.error(error);
       });
   };
-  
+
   const refundHandler = async () => {
-    await axios.put(`${server}/order/order-refund/${id}`,{
+    await axios.put(`${server}/order/order-refund/${id}`, {
       status: "Processing refund"
     }).then((res) => {
-       toast.success(res.data.message);
-    dispatch(getAllOrdersOfUser(user._id));
+      toast.success(res.data.message);
+      dispatch(getAllOrdersOfUser(user._id));
     }).catch((error) => {
       toast.error(error.response.data.message);
     })
@@ -86,30 +86,30 @@ const UserOrderDetails = () => {
       <br />
       {data &&
         data?.cart.map((item, index) => {
-          return(
-          <div className="w-full flex items-start mb-5">
-            <img
-              src={`${backend_url}/${item.images[0]}`}
-              alt=""
-              className="w-[80x] h-[80px]"
-            />
-            <div className="w-full">
-              <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
-                US${item.discountPrice} x {item.qty}
-              </h5>
-            </div>
-            {!item.isReviewed && data?.status === "Delivered" ?  <div
+          return (
+            <div className="w-full flex items-start mb-5">
+              <img
+                src={`${backend_url}/${item.images[0]}`}
+                alt=""
+                className="w-[80x] h-[80px]"
+              />
+              <div className="w-full">
+                <h5 className="pl-3 text-[20px]">{item.name}</h5>
+                <h5 className="pl-3 text-[20px] text-[#00000091]">
+                  ₱ {item.discountPrice} x {item.qty}
+                </h5>
+              </div>
+              {!item.isReviewed && data?.status === "Delivered" ? <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => setOpen(true) || setSelectedItem(item)}
               >
                 Write a review
               </div> : (
-             null
-            )}
-          </div>
+                null
+              )}
+            </div>
           )
-         })}
+        })}
 
       {/* review popup */}
       {open && (
@@ -135,7 +135,7 @@ const UserOrderDetails = () => {
               <div>
                 <div className="pl-3 text-[20px]">{selectedItem?.name}</div>
                 <h4 className="pl-3 text-[20px]">
-                  US${selectedItem?.discountPrice} x {selectedItem?.qty}
+                  ₱ {selectedItem?.discountPrice} x {selectedItem?.qty}
                 </h4>
               </div>
             </div>
@@ -199,7 +199,7 @@ const UserOrderDetails = () => {
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          Total Price: <strong>US${data?.totalPrice}</strong>
+          Total Price: <strong>₱ {data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -223,13 +223,13 @@ const UserOrderDetails = () => {
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
           </h4>
           <br />
-           {
+          {
             data?.status === "Delivered" && (
               <div className={`${styles.button} text-white`}
-              onClick={refundHandler}
+                onClick={refundHandler}
               >Give a Refund</div>
             )
-           }
+          }
         </div>
       </div>
       <br />

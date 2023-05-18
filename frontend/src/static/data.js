@@ -221,7 +221,7 @@ export const categoriesData = [
   },
   {
     id: 4,
-    title: "Paints & Sundries",
+    title: "Paints and Sundries",
     subTitle: "",
     src: PaintsSundries,
   },
