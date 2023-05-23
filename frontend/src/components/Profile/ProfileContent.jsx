@@ -535,7 +535,7 @@ const Address = () => {
   const [open, setOpen] = useState(false);
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState();
+  const [zipCode, setZipCode] = useState(5200);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [addressType, setAddressType] = useState("");
@@ -629,7 +629,7 @@ const Address = () => {
                   </div>
 
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Choose your City</label>
+                    <label className="block pb-2">Choose your Province</label>
                     <select
                       name=""
                       id=""
@@ -638,7 +638,7 @@ const Address = () => {
                       className="w-[95%] border h-[40px] rounded-[5px]"
                     >
                       <option value="" className="block border pb-2">
-                        choose your city
+                        choose your province
                       </option>
                       {State &&
                         State.getStatesOfCountry(country).map((item) => (
@@ -654,7 +654,7 @@ const Address = () => {
                   </div>
 
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Address 1</label>
+                    <label className="block pb-2">City / Municipality</label>
                     <input
                       type="address"
                       className={`${styles.input}`}
@@ -664,7 +664,7 @@ const Address = () => {
                     />
                   </div>
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Address 2</label>
+                    <label className="block pb-2">House # / Street / Barangay </label>
                     <input
                       type="address"
                       className={`${styles.input}`}
@@ -681,7 +681,8 @@ const Address = () => {
                       className={`${styles.input}`}
                       required
                       value={zipCode}
-                      onChange={(e) => setZipCode(e.target.value)}
+                      disabled
+                      // onChange={(e) => setZipCode(e.target.value)}
                     />
                   </div>
 

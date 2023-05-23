@@ -200,8 +200,9 @@ const ShippingInfo = ({
             <input
               type="number"
               value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
+              // onChange={(e) => setZipCode(e.target.value)}
               required
+              disabled
               className={`${styles.input}`}
             />
           </div>
@@ -213,7 +214,8 @@ const ShippingInfo = ({
             <select
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              // onChange={(e) => setCountry(e.target.value)}
+              disabled
             >
               <option className="block pb-2" value="">
                 Choose your country
@@ -227,14 +229,15 @@ const ShippingInfo = ({
             </select>
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">City</label>
+            <label className="block pb-2">Province</label>
             <select
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              disabled
             >
               <option className="block pb-2" value="">
-                Choose your City
+                Choose your province
               </option>
               {State &&
                 State.getStatesOfCountry(country).map((item) => (
@@ -248,21 +251,23 @@ const ShippingInfo = ({
 
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">Address1</label>
+            <label className="block pb-2">City / Municipality</label>
             <input
               type="address"
               required
               value={address1}
-              onChange={(e) => setAddress1(e.target.value)}
+              disabled
+              // onChange={(e) => setAddress1(e.target.value)}
               className={`${styles.input} !w-[95%]`}
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Address2</label>
+            <label className="block pb-2">House # / Street / Barangay </label>
             <input
               type="address"
               value={address2}
-              onChange={(e) => setAddress2(e.target.value)}
+              disabled
+              // onChange={(e) => setAddress2(e.target.value)}
               required
               className={`${styles.input}`}
             />
@@ -271,12 +276,18 @@ const ShippingInfo = ({
 
         <div></div>
       </form>
-      <h5
+      <div
+        className={`${styles.button} w-[50%] h-[40px] text-center rounded-[3px] mt-8 cursor-pointer`}
+        onClick={() => setUserInfo(!userInfo)}
+      >
+        <h5 className="text-white">Select Delivery Address</h5>
+      </div>
+      {/* <h5
         className="text-[18px] cursor-pointer inline-block"
         onClick={() => setUserInfo(!userInfo)}
       >
-        Choose From saved address
-      </h5>
+        Select Delivery Address
+      </h5> */}
       {userInfo && (
         <div>
           {user &&
