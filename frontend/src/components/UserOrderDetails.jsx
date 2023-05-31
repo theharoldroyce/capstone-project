@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { BsFillBagFill } from "react-icons/bs";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../styles/styles";
 import { getAllOrdersOfUser } from "../redux/actions/order";
 import { backend_url, server } from "../server";
 import { RxCross1 } from "react-icons/rx";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar, AiOutlineMessage, } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [rating, setRating] = useState(1);
-
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -63,6 +63,43 @@ const UserOrderDetails = () => {
     })
   };
 
+
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to create a conversation");
+    }
+  };
+
+  const formatTime = (time) => {
+    if (time) {
+      const options = {
+        hour12: true,
+        hour: 'numeric',
+        minute: 'numeric',
+        timeZone: 'Asia/Manila', // Change to Manila, Philippines timezone
+      };
+  
+      return new Date(time).toLocaleString('en-US', options);
+    }
+    return "";
+  };
+
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -77,7 +114,16 @@ const UserOrderDetails = () => {
           Order ID: <span>#{data?._id?.slice(0, 8)}</span>
         </h5>
         <h5 className="text-[#00000084]">
-          Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
+          Placed on: <span>{data?.createdAt?.slice(0, 10)}</span> <span>{formatTime(data?.createdAt)}</span>
+        </h5>
+        <h5 className="text-[#00000084]">
+          Packed on: <span>{data?.packedAt?.slice(0, 10)}</span> <span>{formatTime(data?.packedAt)}</span>
+        </h5>
+        <h5 className="text-[#00000084]">
+          In Transit on: <span>{data?.InTransitAt?.slice(0, 10)}</span> <span>{formatTime(data?.InTransitAt)}</span>
+        </h5>
+        <h5 className="text-[#00000084]">
+          Delivered on: <span>{data?.deliveredAt?.slice(0, 10)}</span> <span>{formatTime(data?.deliveredAt)}</span>
         </h5>
       </div>
 
@@ -232,10 +278,18 @@ const UserOrderDetails = () => {
           }
         </div>
       </div>
+      {/* <div
+        className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
+        onClick={handleMessageSubmit}
+      >
+        <span className="text-white flex items-center">
+          Send Message <AiOutlineMessage className="ml-1" />
+        </span>
+      </div> */}
       <br />
-      {/* <Link to="/">
+      <Link to="/inbox">
         <div className={`${styles.button} text-white`}>Send Message</div>
-      </Link> */}
+      </Link>
       <br />
       <br />
     </div>

@@ -148,19 +148,15 @@ const OrderDetails = () => {
         >
           {[
             "Processing",
-            "Transferred to delivery partner",
-            "Shipping",
-            "Received",
-            "On the way",
+            "Packed",
+            "In Transit",
             "Delivered",
           ]
             .slice(
               [
                 "Processing",
-                "Transferred to delivery partner",
-                "Shipping",
-                "Received",
-                "On the way",
+                "Packed",
+                "In Transit",
                 "Delivered",
               ].indexOf(data?.status)
             )
